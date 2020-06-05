@@ -2,6 +2,6 @@ package space
 
 // Space Project space
 type Space struct {
-	ID   string
-	Name string
+	ID   int32 `json:"id"`
+	Name string `json:"name"`
 }

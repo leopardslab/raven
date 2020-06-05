@@ -1,8 +1,8 @@
 module github.com/cloudlibz/raven
 
-go 1.12
+go 1.14
 
 require (
-	github.com/aws/aws-sdk-go v1.25.31
-	github.com/go-chi/chi v4.0.2+incompatible
+	github.com/gorilla/mux v1.7.4
+	github.com/olivere/elastic/v7 v7.0.16
 )
