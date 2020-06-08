@@ -5,23 +5,20 @@ import (
 	"fmt"
 	"github.com/olivere/elastic/v7"
 )
+
 /*
- * GetESClient() initialize elaticsearch client instance
+ * getESClient() initialize elaticsearch client instance
  * and return the client
  */
-func GetESClient() *elastic.Client {
-
-	client, err :=  elastic.NewClient(elastic.SetURL("http://localhost:9200"),
+func getESClient() *elastic.Client {
+	client, err := elastic.NewClient(elastic.SetURL("http://localhost:9200"),
 		elastic.SetSniff(false),
 		elastic.SetHealthcheck(false))
-
 	if err != nil {
 		fmt.Println("Error initializing : ", err)
 		panic("Client fail ")
 	}
-
 	fmt.Println("ES initialized...")
-
 	return client
 
 }
@@ -31,15 +28,14 @@ func GetESClient() *elastic.Client {
  @data byte array of data
  @Type type of struct
 */
-func IndexData(data []byte,Type string) *elastic.IndexResponse {
+func IndexData(data []byte, Type string) *elastic.IndexResponse {
 	ctx := context.Background()
-	esclient := GetESClient()
+	esclient := getESClient()
 	js := string(data)
 	ind, err := esclient.Index().
 		Index(Type).
 		BodyJson(js).
 		Do(ctx)
-
 	if err != nil {
 		panic(err)
 	}
@@ -47,8 +43,8 @@ func IndexData(data []byte,Type string) *elastic.IndexResponse {
 	return ind
 }
 
-type Query struct{
-	Key string
+type Query struct {
+	Key   string
 	Value string
 }
 
@@ -57,10 +53,9 @@ type Query struct{
  @data
  @Type type of struct
 */
-func QueryData(data Query,Type string) *elastic.SearchResult {
+func QueryData(data Query, Type string) *elastic.SearchResult {
 	ctx := context.Background()
-	esclient := GetESClient()
-
+	esclient := getESClient()
 	searchSource := elastic.NewSearchSource()
 	searchSource.Query(elastic.NewMatchQuery(data.Key, data.Value))
 	searchService := esclient.Search().Index(Type).SearchSource(searchSource)
@@ -68,7 +63,6 @@ func QueryData(data Query,Type string) *elastic.SearchResult {
 	if err != nil {
 		fmt.Println("[ProductsES][GetPIds]Error=", err)
 	}
-
 	return searchResult
 }
 
@@ -78,7 +72,7 @@ func QueryData(data Query,Type string) *elastic.SearchResult {
 */
 func QueryAllData(Type string) *elastic.SearchResult {
 	ctx := context.Background()
-	esclient := GetESClient()
+	esclient := getESClient()
 	searchSource := elastic.NewSearchSource()
 	searchSource.Query(elastic.MatchAllQuery{})
 	searchService := esclient.Search().Index(Type).SearchSource(searchSource)
@@ -95,9 +89,9 @@ func QueryAllData(Type string) *elastic.SearchResult {
  @data interface map of data
  @index the index name
 */
-func UpdateData(id string,data interface{},index string) *elastic.UpdateResponse {
+func UpdateData(id string, data interface{}, index string) *elastic.UpdateResponse {
 	ctx := context.Background()
-	esclient := GetESClient()
+	esclient := getESClient()
 	UpdateResponse, err := esclient.Update().Index(index).Id(id).Doc(data).Do(ctx)
 	if err != nil {
 		fmt.Println("[ProductsES][GetPIds]Error=", err)
