@@ -1,6 +1,9 @@
-# raven
+# raven :chart_with_downwards_trend: :bar_chart:
+##### Raven is a cloud-native API monitoring tool to monitor the health of 3rd party APIs
 
-## 🚀 Install
+### Monitoring Metrices
+
+## Install
 
 ### API
 
