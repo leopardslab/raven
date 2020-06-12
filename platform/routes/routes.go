@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/cloudlibz/raven/internal/space"
+	"github.com/cloudlibz/raven/platform/auth"
 	"github.com/cloudlibz/raven/platform/elasticsearch"
 	"github.com/gorilla/mux"
 	"net/http"
@@ -16,7 +17,8 @@ func Route() * mux.Router {
 	r.HandleFunc("/space", createSpace).Methods("POST")
 	r.HandleFunc("/spaces", getAllSpace).Methods("GET")
 	r.HandleFunc("/space/{id}", getSpace).Methods("GET")
-	r.HandleFunc("/space/{id}", updateSpace).Methods("PUT")
+	r.HandleFunc("/oauth/redirect", auth.Oauth).Methods("GET")
+	r.HandleFunc("/space/{id}", getSpace).Methods("GET")
 	return r
 }
 
