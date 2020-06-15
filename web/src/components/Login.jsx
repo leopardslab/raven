@@ -1,29 +1,69 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GetTokenAuthUrl } from "../utils/Auth";
 import { withRouter, useLocation } from "react-router-dom";
-import { GithubLoginButton } from "react-social-login-buttons";
+import {
+  GithubLoginButton,
+  GoogleLoginButton,
+  TwitterLoginButton,
+} from "react-social-login-buttons";
 
-const CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
+const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
+const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL;
-
-const handleClick = () => {
-  window.location.assign(
-    `https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}`
-  );
-};
 
 function Login() {
   let location = useLocation();
+  let [oauthService, setOauthService] = useState("");
+
   useEffect(() => {
-    GetTokenAuthUrl(location.search.replace("?code=", ""));
+    getAuth();
   }, [location]);
-  const getParams = () => {
-    console.log("location", location.search.replace("?code=", ""));
+
+  const getAuth = () => {
+    let code = location.search.replace("?code=", "");
+    if (code) {
+      GetTokenAuthUrl(code, oauthService);
+    }
   };
+
+  const handleClick = (type) => {
+    setOauthService(type);
+    switch (type) {
+      case "Github":
+        window.location.assign(
+          `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${REDIRECT_URL}`
+        );
+        break;
+      case "Goolge":
+        window.location.assign(
+          `https://www.googleapis.com/oauth2/v2/userinfo?access_token=`
+        );
+        break;
+      case "Twitter":
+        window.location.assign(
+          `https://www.googleapis.com/oauth2/v2/userinfo?access_token=`
+        );
+        break;
+    }
+  };
+
   return (
     <div>
-      <GithubLoginButton onClick={handleClick} />
-      <button onClick={getParams}>Button</button>
+      <GithubLoginButton
+        onClick={() => {
+          handleClick("Github");
+        }}
+      />
+      <GoogleLoginButton
+        onClick={() => {
+          handleClick("Goolge");
+        }}
+      />
+      <TwitterLoginButton
+        onClick={() => {
+          handleClick("Twitter");
+        }}
+      />
     </div>
   );
 }

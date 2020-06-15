@@ -18,7 +18,6 @@ var conf = Conf{
 	RedirectUrl:  "http://localhost:3003/oauth/redirect",
 }
 
-
 type Token struct {
 	AccessToken string `json:"access_token"`
 	TokenType   string `json:"token_type"`
@@ -26,7 +25,7 @@ type Token struct {
 }
 
 // Authenticate and obtain user information
-func Oauth(w http.ResponseWriter, r *http.Request) {
+func GithubCallback(w http.ResponseWriter, r *http.Request) {
 
 	var err error
 
@@ -34,16 +33,16 @@ func Oauth(w http.ResponseWriter, r *http.Request) {
 	var code = r.URL.Query().Get("code")
 
 	// Obtain token by code
-	var tokenAuthUrl = GetTokenAuthUrl(code)
+	var tokenAuthUrl = getTokenAuthUrl(code)
 	var token *Token
-	if token, err = GetToken(tokenAuthUrl); err != nil {
+	if token, err = getToken(tokenAuthUrl); err != nil {
 		fmt.Println(err)
 		return
 	}
 
 	// Obtain user information through token
 	var userInfo map[string]interface{}
-	if userInfo, err = GetUserInfo(token); err != nil {
+	if userInfo, err = getUserInfo(token); err != nil {
 		fmt.Println("Failed to obtain user information, the error message is:", err)
 		return
 	}
@@ -63,7 +62,7 @@ func Oauth(w http.ResponseWriter, r *http.Request) {
 }
 
 // Get token authentication url by code
-func GetTokenAuthUrl(code string) string {
+func getTokenAuthUrl(code string) string {
 	return fmt.Sprintf(
 		"https://github.com/login/oauth/access_token?client_id=%s&client_secret=%s&code=%s",
 		conf.ClientId, conf.ClientSecret, code,
@@ -71,7 +70,7 @@ func GetTokenAuthUrl(code string) string {
 }
 
 // Get token
-func GetToken(url string) (*Token, error) {
+func getToken(url string) (*Token, error) {
 
 	// make a request
 	var req *http.Request
@@ -98,10 +97,10 @@ func GetToken(url string) (*Token, error) {
 }
 
 // Get user information
-func GetUserInfo(token *Token) (map[string]interface{}, error) {
+func getUserInfo(token *Token) (map[string]interface{}, error) {
 
 	// Make a request
-	var userInfoUrl = "https://api.github.com/user"	// github user information acquisition interface
+	var userInfoUrl = "https://api.github.com/user" // github user information acquisition interface
 	var req *http.Request
 	var err error
 	if req, err = http.NewRequest(http.MethodGet, userInfoUrl, nil); err != nil {
@@ -124,5 +123,3 @@ func GetUserInfo(token *Token) (map[string]interface{}, error) {
 	}
 	return userInfo, nil
 }
-
-

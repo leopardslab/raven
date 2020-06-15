@@ -13,5 +13,3 @@ func main() {
 	http.Handle("/", r)
 	http.ListenAndServe(":3003", handlers.CORS()(r))
 }
-
-
