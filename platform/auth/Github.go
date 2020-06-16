@@ -3,6 +3,7 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cloudlibz/raven/platform/config"
 	"net/http"
 )
 
@@ -12,16 +13,21 @@ type Conf struct {
 	RedirectUrl  string // Authorization callback URL
 }
 
-var conf = Conf{
-	ClientId:     "6366e1b94de54e8a5610",
-	ClientSecret: "03a3125f2c86070baf09c92914e50d1ce88611ea",
-	RedirectUrl:  "http://localhost:3003/oauth/redirect",
-}
+var conf Conf
 
 type Token struct {
 	AccessToken string `json:"access_token"`
 	TokenType   string `json:"token_type"`
 	Scope       string `json:"scope"`
+}
+
+func init() {
+	Config := config.New()
+	conf = Conf{
+		ClientId:     Config.GitHub.ClientId,
+		ClientSecret: Config.GitHub.ClientSecret,
+		RedirectUrl:  Config.GitHub.RedirectUrl,
+	}
 }
 
 // Authenticate and obtain user information

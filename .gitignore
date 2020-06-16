@@ -44,7 +44,9 @@
 
 # idea
 .idea
+.vscode
 
 node_modules
 .env.development
 .env.production
+.env

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GetTokenAuthUrl } from "../utils/Auth";
+import { GetTokenAuthUrl, setLocalStoage } from "../utils/Auth";
 import { withRouter, useLocation } from "react-router-dom";
 import {
   GithubLoginButton,
@@ -13,21 +13,21 @@ const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL;
 
 function Login() {
   let location = useLocation();
-  let [oauthService, setOauthService] = useState("");
 
   useEffect(() => {
     getAuth();
   }, [location]);
 
   const getAuth = () => {
-    let code = location.search.replace("?code=", "");
+    let code = new URLSearchParams(location.search).get("code");
+    let state = new URLSearchParams(location.search).get("state");
     if (code) {
-      GetTokenAuthUrl(code, oauthService);
+      GetTokenAuthUrl(code, state);
     }
   };
 
   const handleClick = (type) => {
-    setOauthService(type);
+    setLocalStoage("provider", type);
     switch (type) {
       case "Github":
         window.location.assign(
@@ -36,13 +36,11 @@ function Login() {
         break;
       case "Goolge":
         window.location.assign(
-          `https://www.googleapis.com/oauth2/v2/userinfo?access_token=`
+          `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/userinfo.email&state=state_parameter_passthrough_value&redirect_uri=${REDIRECT_URL}&access_type=offline&response_type=code&client_id=${GOOGLE_CLIENT_ID}`
         );
         break;
       case "Twitter":
-        window.location.assign(
-          `https://www.googleapis.com/oauth2/v2/userinfo?access_token=`
-        );
+        window.location.assign(`https://api.twitter.com/oauth/request_token`);
         break;
     }
   };
@@ -59,11 +57,11 @@ function Login() {
           handleClick("Goolge");
         }}
       />
-      <TwitterLoginButton
+      {/* <TwitterLoginButton
         onClick={() => {
           handleClick("Twitter");
         }}
-      />
+      /> */}
     </div>
   );
 }

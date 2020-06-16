@@ -1,34 +1,33 @@
 package auth
 
 import (
+	"context"
 	"fmt"
+	"github.com/cloudlibz/raven/platform/config"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"io/ioutil"
 	"net/http"
 )
 
-var (
+var googleOauthConfig *oauth2.Config
+
+func init() {
+	conf := config.New()
 	googleOauthConfig = &oauth2.Config{
-		ClientID:     "403759859249-jmihasu0lfgasheptoau86pt62ntklf5.apps.googleusercontent.com",
-		ClientSecret: "hmPhNly-KzXzcepA3RJ2FyD2",
+		RedirectURL:  conf.Google.RedirectURL,
+		ClientID:     conf.Google.ClientID,
+		ClientSecret: conf.Google.ClientSecret,
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
 		Endpoint:     google.Endpoint,
 	}
-
-	// TODO RANDOMIZE
-	randomState = "random"
-)
+}
 
 func GoogleCallback(w http.ResponseWriter, r *http.Request) {
-	if r.FormValue("state") != randomState {
-		fmt.Println("State is not valid")
-		return
-	}
 
-	token, err := googleOauthConfig.Exchange(oauth2.NoContext, r.FormValue("code"))
+	token, err := googleOauthConfig.Exchange(context.Background(), r.URL.Query().Get("code"))
 	if err != nil {
-		fmt.Printf("Could not get token %s\n", err.Error())
+		fmt.Printf("Could not get token %s\n", err)
 		return
 	}
 
@@ -45,6 +44,5 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 		fmt.Printf("Cannot parse response %s\n", err.Error())
 		return
 	}
-
-	fmt.Fprintf(w, "Response %s = ", content)
+	w.Write(content)
 }
