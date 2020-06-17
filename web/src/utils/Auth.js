@@ -18,8 +18,8 @@ export const GetTokenAuthUrl = (code, state) => {
     .get(
       `${SERVER_URL}/oauth/redirect?code=${code}&type=${type}&state=${state}`
     )
-    .then((data) => {
-      console.log(data);
+    .then(({ data }) => {
+      setLocalStoage("hub", data.token);
     })
     .catch((error) => {
       console.log(error);

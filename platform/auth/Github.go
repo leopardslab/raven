@@ -5,7 +5,15 @@ import (
 	"fmt"
 	"github.com/cloudlibz/raven/platform/config"
 	"net/http"
+	"strconv"
 )
+
+type GitHub struct {
+	id      string
+	name    string
+	picture string
+	token   string
+}
 
 type Conf struct {
 	ClientId     string // Client ID
@@ -42,27 +50,32 @@ func GithubCallback(w http.ResponseWriter, r *http.Request) {
 	var tokenAuthUrl = getTokenAuthUrl(code)
 	var token *Token
 	if token, err = getToken(tokenAuthUrl); err != nil {
-		fmt.Println(err)
-		return
+		fmt.Fprint(w, err)
+		w.WriteHeader(http.StatusBadRequest)
 	}
 
 	// Obtain user information through token
 	var userInfo map[string]interface{}
-	if userInfo, err = getUserInfo(token); err != nil {
-		fmt.Println("Failed to obtain user information, the error message is:", err)
-		return
+	if userInfo, err = getGithubUserInfo(token); err != nil {
+		fmt.Fprint(w, "Failed to obtain user information, the error message is: ", err)
+		w.WriteHeader(http.StatusBadRequest)
+	}
+
+	if userInfo["token"], err = GenerateToken(strconv.FormatFloat(userInfo["id"].(float64), 'E', -1, 64), userInfo["name"].(string)); err != nil {
+		fmt.Fprint(w, "An error couldn't generate token", err)
+		w.WriteHeader(http.StatusBadGateway)
 	}
 
 	//  Return user information to the front end
 	var userInfoBytes []byte
 	if userInfoBytes, err = json.Marshal(userInfo); err != nil {
-		fmt.Println("An error occurred when converting user information (map) to user information ([]byte), the error information is", err)
-		return
+		fmt.Fprint(w, "An error occurred when converting user information (map) to user information ([]byte), the error information is", err)
+		w.WriteHeader(http.StatusBadGateway)
 	}
 	w.Header().Set("Content-Type", "application/json")
 	if _, err = w.Write(userInfoBytes); err != nil {
-		fmt.Println("An error occurred while returning user information ([]byte) to the front end. The error message is:", err)
-		return
+		fmt.Fprint(w, "An error occurred while returning user information ([]byte) to the front end. The error message is:", err)
+		w.WriteHeader(http.StatusBadGateway)
 	}
 
 }
@@ -103,7 +116,7 @@ func getToken(url string) (*Token, error) {
 }
 
 // Get user information
-func getUserInfo(token *Token) (map[string]interface{}, error) {
+func getGithubUserInfo(token *Token) (map[string]interface{}, error) {
 
 	// Make a request
 	var userInfoUrl = "https://api.github.com/user" // github user information acquisition interface
