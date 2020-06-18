@@ -5,6 +5,10 @@
 
 ## Install
 
+### Environment Variables
+create a .env with keys file based on the .env.example template
+
+
 ### API
 
 ```

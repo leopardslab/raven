@@ -34,7 +34,7 @@ function Login() {
           `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${REDIRECT_URL}`
         );
         break;
-      case "Goolge":
+      case "Google":
         window.location.assign(
           `https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A//www.googleapis.com/auth/userinfo.email&state=state_parameter_passthrough_value&redirect_uri=${REDIRECT_URL}&access_type=offline&response_type=code&client_id=${GOOGLE_CLIENT_ID}`
         );

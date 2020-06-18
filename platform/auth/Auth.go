@@ -15,13 +15,13 @@ func GetAuthClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	switch Type {
-	case "Goolge":
+	case "Google":
 		GoogleCallback(w, r)
 		break
 	case "Github":
 		GithubCallback(w, r)
 		break
-	case "Twtter":
+	case "Twitter":
 		fmt.Println("Twitter")
 		break
 	default:
@@ -30,11 +30,11 @@ func GetAuthClient(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func GenerateToken(id string, name string) (string, error) {
+func GenerateToken(id string, username string) (string, error) {
 	signingKey := []byte(os.Getenv("JWT_KEY"))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"id":   id,
-		"name": name,
+		"id":       id,
+		"username": username,
 	})
 	tokenString, err := token.SignedString(signingKey)
 	return tokenString, err

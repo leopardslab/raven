@@ -4,17 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/cloudlibz/raven/internal/user"
 	"github.com/cloudlibz/raven/platform/config"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"net/http"
 )
-
-type Google struct {
-	id       string `json:"id"`
-	email    string `json:"email"`
-	picture  string `json:"picture"`
-}
 
 var googleOauthConfig *oauth2.Config
 
@@ -44,7 +39,21 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if userInfo["token"],err = GenerateToken(userInfo["id"].(string),userInfo["email"].(string)); err != nil {
+	googleUser := &user.User{
+		Id:       userInfo["id"].(string),
+		Username: userInfo["email"].(string),
+		Avatar:   userInfo["picture"].(string),
+	}
+
+	existingUser, err := user.GetUser(googleUser.Id)
+	if err != nil {
+		w.WriteHeader(http.StatusBadGateway)
+	}
+	if (existingUser == user.User{}) {
+		user.CreateUser(googleUser)
+	}
+
+	if userInfo["token"], err = GenerateToken(googleUser.Id, googleUser.Username); err != nil {
 		fmt.Println("An error couldn't generate token", err)
 	}
 

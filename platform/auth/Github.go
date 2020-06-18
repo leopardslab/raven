@@ -3,6 +3,7 @@ package auth
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cloudlibz/raven/internal/user"
 	"github.com/cloudlibz/raven/platform/config"
 	"net/http"
 	"strconv"
@@ -61,7 +62,21 @@ func GithubCallback(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 	}
 
-	if userInfo["token"], err = GenerateToken(strconv.FormatFloat(userInfo["id"].(float64), 'E', -1, 64), userInfo["name"].(string)); err != nil {
+	githubUser := &user.User{
+		Id:       strconv.FormatFloat(userInfo["id"].(float64), 'E', -1, 64),
+		Username: userInfo["name"].(string),
+		Avatar:   userInfo["avatar_url"].(string),
+	}
+
+	existingUser, err := user.GetUser(githubUser.Id)
+	if err != nil {
+		w.WriteHeader(http.StatusBadGateway)
+	}
+	if (existingUser == user.User{}) {
+		user.CreateUser(githubUser)
+	}
+
+	if userInfo["token"], err = GenerateToken(githubUser.Id, githubUser.Username); err != nil {
 		fmt.Fprint(w, "An error couldn't generate token", err)
 		w.WriteHeader(http.StatusBadGateway)
 	}
@@ -111,7 +126,6 @@ func getToken(url string) (*Token, error) {
 	if err = json.NewDecoder(res.Body).Decode(&token); err != nil {
 		return nil, err
 	}
-	fmt.Println(token)
 	return &token, nil
 }
 
