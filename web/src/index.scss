@@ -1599,4 +1599,66 @@ section {
   color: #3498db;
 }
 
+/*--------------------------------------------------------------
+# Custom component
+--------------------------------------------------------------*/
+
+.login {
+  box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
+  border-radius: 5px;
+  background: #ffffff;
+  transition: ease all 0.3s;
+  padding: 14px 0px 14px 0px;
+
+  .tilte {
+    text-align: center;
+  }
+
+  .sub-title {
+    text-align: center;
+  }
+
+  .google {
+    color: #ffffff;
+    border-radius: 50px;
+    margin: 14px 0px 7px 0px;
+    padding: 0px 35px;
+    border: none;
+    background: #de5246;
+    height: 50px;
+    font-weight: 500;
+    width: 100%;
+  }
+
+  .google:hover {
+    background: #f7301e;
+  }
+
+  .github {
+    color: #ffffff;
+    border-radius: 50px;
+    margin: 14px 0px 7px 0px;
+    padding: 0px 35px;
+    border: none;
+    background: #24292e;
+    height: 50px;
+    font-weight: 500;
+    width: 100%;
+  }
+
+  .github:hover {
+    background: #434446;
+  }
+
+  .twitter {
+    background: #1da1f2;
+  }
+
+  .logo-icon {
+    height: 30px;
+    width: 30px;
+    margin: 0px 15px 0px 0px;
+  }
+}
+
 @import "~bootstrap/scss/bootstrap.scss";
