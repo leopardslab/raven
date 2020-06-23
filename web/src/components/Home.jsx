@@ -20,7 +20,9 @@ function Home() {
               <div className="col-2"></div>
               <div className="col-8">
                 <div>
-                  <h3 className="sub-title">Sign in to create personalized spaces</h3>
+                  <div className="sub-title">
+                    Sign in to create personalized spaces
+                  </div>
                 </div>
               </div>
               <div className="col-2"></div>
@@ -29,7 +31,11 @@ function Home() {
               <div className="col-2"></div>
               <div className="col-8">
                 <button className="google">
-                  <img className="logo-icon" src="assets/google.svg" />
+                  <img
+                    className="logo-icon"
+                    alt="google"
+                    src="assets/google.svg"
+                  />
                   Google
                 </button>
               </div>
@@ -39,7 +45,11 @@ function Home() {
               <div className="col-2"></div>
               <div className="col-8">
                 <button className="github">
-                  <img className="logo-icon" src="assets/github.svg" />
+                  <img
+                    className="logo-icon"
+                    alt="github"
+                    src="assets/github.svg"
+                  />
                   Github
                 </button>
               </div>

@@ -1,5 +1,9 @@
 import React, { Suspense } from "react";
 import { isAuthenticated } from "./utils/Auth";
+// import Login from "./components/Login";
+import Space from "./components/Space";
+import Loading from "./components/Loading";
+import Home from "./components/Home";
 import Error from "./components/Error";
 import Home from "./components/Home";
 import Login from "./components/Login";
@@ -21,7 +25,12 @@ function App() {
           <Route
             exact
             path="/"
-            render={(props) => <PrivateRoute component={Home} {...props} />}
+            render={(props) => <PrivateRoute component={Space} {...props} />}
+          />
+          <Route
+            exact
+            path="/space"
+            render={(props) => <PrivateRoute component={Space} {...props} />}
           />
           <Route
             exact
