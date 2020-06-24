@@ -1669,10 +1669,79 @@ section {
 }
 
 .raven-input {
-  border-radius: 10px;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
   width: 100%;
-  padding: 3px;
+  padding: 0px 0px 0px 10px;
   outline-width: 0;
+  min-height: 38px;
+  border-color: hsl(0, 0%, 70%);
+  justify-content: space-between;
+  margin: 0px 0px 14px 0px;
+}
+
+.raven-input:focus {
+  border-color: #2684ff;
+  border-width: 2px;
+}
+
+.raven-buton {
+  color: hsl(0, 0%, 70%);
+  background-color: #ffffff;
+  border-color: hsl(0, 0%, 70%);
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50px;
+  margin: 14px 7px 14px 7px;
+  padding: 0px;
+  height: 45px;
+  width: 100%;
+  outline-width: 0;
+}
+
+.raven-buton:focus {
+  outline: none;
+}
+
+.raven-buton:hover {
+  background-color: #2684ff;
+  color: #ffffff;
+  border: none;
+}
+
+.raven-tab {
+  width: 100%;
+  .tabs {
+    font-family: "Roboto";
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+  }
+
+  .tab-buttons {
+    margin-bottom: 20px;
+  }
+
+  .tab-button {
+    margin-right: 15px;
+    font-size: 18px;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    color: rgba(0, 0, 0, 0.4);
+    transition: all ease-in-out 0.2s;
+    border-bottom: 2px solid transparent;
+  }
+
+  .tab-button:focus {
+    outline-width: 0px;
+    border-bottom: 2px solid #2684ff;
+    color: black;
+  }
 }
 
 @import "~bootstrap/scss/bootstrap.scss";
