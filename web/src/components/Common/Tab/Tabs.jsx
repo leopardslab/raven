@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 
-const TabButtons = ({ buttons, changeTab, activeTab }) => {
+const TabButtons = ({ i, buttons, changeTab, activeTab }) => {
   return (
     <div className="tab-buttons">
       {buttons.map((button) => {
         return (
-          <button className="tab-button" onClick={() => changeTab(button)}>
+          <button
+            key={i}
+            className="tab-button"
+            onClick={() => changeTab(button)}
+          >
             {button}
           </button>
         );
@@ -29,7 +33,8 @@ function Tabs({ children }) {
         <div>
           {React.Children.map(children, (child) => {
             buttons.push(child.props.label);
-            if (child.props.label === activeTab || child.props.defult) content = child.props.children;
+            if (child.props.label === activeTab || child.props.defult)
+              content = child.props.children;
           })}
 
           <TabButtons

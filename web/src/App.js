@@ -3,7 +3,6 @@ import { isAuthenticated } from "./utils/Auth";
 // import Login from "./components/Login";
 import Space from "./components/Space";
 import Loading from "./components/Loading";
-import Home from "./components/Home";
 import Error from "./components/Error";
 import Home from "./components/Home";
 import Login from "./components/Login";
@@ -15,7 +14,6 @@ import {
   Redirect,
 } from "react-router-dom";
 import { ToastProvider } from "react-toast-notifications";
-import { isAuthenticated } from "./util/auth";
 
 function App() {
   return (
@@ -34,8 +32,8 @@ function App() {
           />
           <Route
             exact
-            path="/signin"
-            render={(props) => <PublicRoute component={Home} {...props} />}
+            path="/login"
+            render={(props) => <PrivateRoute component={Login} {...props} />}
           />
           <Route exact path="*" render={(props) => <Error {...props} />} />
         </Switch>

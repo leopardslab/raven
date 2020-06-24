@@ -1,11 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { GetTokenAuthUrl, setLocalStoage } from "../utils/Auth";
 import { withRouter, useLocation } from "react-router-dom";
-import {
-  GithubLoginButton,
-  GoogleLoginButton,
-  TwitterLoginButton,
-} from "react-social-login-buttons";
 
 const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -46,22 +41,69 @@ function Login() {
   };
 
   return (
-    <div>
-      <GithubLoginButton
-        onClick={() => {
-          handleClick("Github");
-        }}
-      />
-      <GoogleLoginButton
-        onClick={() => {
-          handleClick("Goolge");
-        }}
-      />
-      {/* <TwitterLoginButton
-        onClick={() => {
-          handleClick("Twitter");
-        }}
-      /> */}
+    <div className="container">
+      <div className="row">
+        <div className="col-1 col-sm-2 col-md-2"></div>
+        <div className="col-10 col-sm-8 col-md-8">
+          <div className="login">
+            <div className="row">
+              <div className="col-2"></div>
+              <div className="col-8">
+                <div>
+                  <h3 className="tilte">Welcome</h3>
+                </div>
+              </div>
+              <div className="col-2"></div>
+            </div>
+            <div className="row">
+              <div className="col-2"></div>
+              <div className="col-8">
+                <div>
+                  <div className="sub-title">
+                    Sign in to create personalized spaces
+                  </div>
+                </div>
+              </div>
+              <div className="col-2"></div>
+            </div>
+            <div className="row">
+              <div className="col-2"></div>
+              <div className="col-8">
+                <button
+                  className="google"
+                  onClick={() => handleClick("Google")}
+                >
+                  <img
+                    className="logo-icon"
+                    alt="google"
+                    src="assets/google.svg"
+                  />
+                  Google
+                </button>
+              </div>
+              <div className="col-2"></div>
+            </div>
+            <div className="row">
+              <div className="col-2"></div>
+              <div className="col-8">
+                <button
+                  className="github"
+                  onClick={() => handleClick("Github")}
+                >
+                  <img
+                    className="logo-icon"
+                    alt="github"
+                    src="assets/github.svg"
+                  />
+                  Github
+                </button>
+              </div>
+              <div className="col-2"></div>
+            </div>
+          </div>
+        </div>
+        <div className="col-1 col-sm-2 col-md-2"></div>
+      </div>
     </div>
   );
 }

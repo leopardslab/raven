@@ -10,8 +10,6 @@ export const getLocalStoageItem = (key) => {
   return localStorage.getItem(key);
 };
 
-export const isAuthenticated = () => {};
-
 export const GetTokenAuthUrl = (code, state) => {
   let type = getLocalStoageItem("provider");
   axios
@@ -24,4 +22,32 @@ export const GetTokenAuthUrl = (code, state) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+export const Authenticate = ({ data }) => {
+  localStorage.setItem("raven", data.token);
+};
+
+export const LogIn = (cb) => {
+  if (this.isAuthenticated()) {
+    cb();
+  }
+};
+
+export const LogOut = (cb) => {
+  localStorage.clear();
+  cb();
+};
+
+export const isAuthenticated = () => {
+  //return localStorage.hasOwnProperty("raven");
+  return true;
+};
+
+export const AuthToken = () => {
+  return localStorage.getItem("raven");
+};
+
+export const getUserId = () => {
+  return localStorage.getItem("raven");
 };
