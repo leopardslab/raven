@@ -53,7 +53,7 @@ func GoogleCallback(w http.ResponseWriter, r *http.Request) {
 		user.CreateUser(googleUser)
 	}
 
-	if userInfo["token"], err = GenerateToken(googleUser.Id, googleUser.Username); err != nil {
+	if userInfo["token"], err = GenerateToken(googleUser.Id, googleUser.Username, googleUser.Avatar); err != nil {
 		fmt.Println("An error couldn't generate token", err)
 	}
 

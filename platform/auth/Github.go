@@ -76,7 +76,7 @@ func GithubCallback(w http.ResponseWriter, r *http.Request) {
 		user.CreateUser(githubUser)
 	}
 
-	if userInfo["token"], err = GenerateToken(githubUser.Id, githubUser.Username); err != nil {
+	if userInfo["token"], err = GenerateToken(githubUser.Id, githubUser.Username, githubUser.Avatar); err != nil {
 		fmt.Fprint(w, "An error couldn't generate token", err)
 		w.WriteHeader(http.StatusBadGateway)
 	}

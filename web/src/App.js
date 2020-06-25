@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import { isAuthenticated } from "./utils/Auth";
-// import Login from "./components/Login";
 import Space from "./components/Space";
 import Loading from "./components/Loading";
 import Error from "./components/Error";
@@ -32,8 +31,13 @@ function App() {
           />
           <Route
             exact
+            path="/home"
+            render={(props) => <PrivateRoute component={Home} {...props} />}
+          />
+          <Route
+            exact
             path="/login"
-            render={(props) => <PrivateRoute component={Login} {...props} />}
+            render={(props) => <PublicRoute component={Login} {...props} />}
           />
           <Route exact path="*" render={(props) => <Error {...props} />} />
         </Switch>

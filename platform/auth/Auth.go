@@ -30,11 +30,12 @@ func GetAuthClient(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func GenerateToken(id string, username string) (string, error) {
+func GenerateToken(id string, username string, avatar string) (string, error) {
 	signingKey := []byte(os.Getenv("JWT_KEY"))
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"id":       id,
 		"username": username,
+		"avatar":   avatar,
 	})
 	tokenString, err := token.SignedString(signingKey)
 	return tokenString, err

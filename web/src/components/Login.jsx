@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { GetTokenAuthUrl, setLocalStoage } from "../utils/Auth";
-import { withRouter, useLocation } from "react-router-dom";
+import { withRouter, useLocation, useHistory } from "react-router-dom";
+import { useToasts } from "react-toast-notifications";
 
 const GITHUB_CLIENT_ID = process.env.REACT_APP_GITHUB_CLIENT_ID;
 const GOOGLE_CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
@@ -8,6 +9,8 @@ const REDIRECT_URL = process.env.REACT_APP_REDIRECT_URL;
 
 function Login() {
   let location = useLocation();
+  let history = useHistory();
+  let { addToast } = useToasts();
 
   useEffect(() => {
     getAuth();
@@ -17,7 +20,17 @@ function Login() {
     let code = new URLSearchParams(location.search).get("code");
     let state = new URLSearchParams(location.search).get("state");
     if (code) {
-      GetTokenAuthUrl(code, state);
+      GetTokenAuthUrl(code, state, (error, user) => {
+        if (error) {
+          addToast("Unable to login! Please try again", {
+            appearance: "error",
+            autoDismiss: true,
+          });
+        }
+        if (user) {
+          history.push("/space");
+        }
+      });
     }
   };
 

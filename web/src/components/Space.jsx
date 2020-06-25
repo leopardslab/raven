@@ -5,6 +5,7 @@ import Headers from "./Spaces/Headers";
 import Tab from "./Common/Tab/Tab";
 import Tabs from "./Common/Tab/Tabs";
 import { v4 as uuid } from "uuid";
+import { CreateSpace } from "../services/Services";
 
 function Space() {
   const [headers, setHeaders] = useState([
@@ -19,8 +20,7 @@ function Space() {
   });
 
   const createSpace = () => {
-    let space = { ...basic, headers, body };
-    console.log("space", space);
+    CreateSpace({ ...basic, headers, body });
   };
 
   return (

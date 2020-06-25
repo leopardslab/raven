@@ -1,4 +1,6 @@
 import axios from "axios";
+import _ from "lodash";
+import jwt_decode from "jwt-decode";
 
 const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 
@@ -10,17 +12,18 @@ export const getLocalStoageItem = (key) => {
   return localStorage.getItem(key);
 };
 
-export const GetTokenAuthUrl = (code, state) => {
+export const GetTokenAuthUrl = (code, state, callback) => {
   let type = getLocalStoageItem("provider");
   axios
     .get(
       `${SERVER_URL}/oauth/redirect?code=${code}&type=${type}&state=${state}`
     )
     .then(({ data }) => {
-      setLocalStoage("hub", data.token);
+      setLocalStoage("raven", data.token);
+      callback(null, data);
     })
     .catch((error) => {
-      console.log(error);
+      callback(error, null);
     });
 };
 
@@ -40,8 +43,10 @@ export const LogOut = (cb) => {
 };
 
 export const isAuthenticated = () => {
-  //return localStorage.hasOwnProperty("raven");
-  return true;
+  return (
+    !_.isUndefined(localStorage.getItem("raven")) &&
+    !_.isNull(localStorage.getItem("raven"))
+  );
 };
 
 export const AuthToken = () => {
@@ -50,4 +55,14 @@ export const AuthToken = () => {
 
 export const getUserId = () => {
   return localStorage.getItem("raven");
+};
+
+export const getUserInfo = () => {
+  try {
+    return !_.isUndefined(localStorage.getItem("raven"))
+      ? jwt_decode(localStorage.getItem("raven"))
+      : { avatar: "", name: "" };
+  } catch (error) {
+    return { avatar: "", name: "" };
+  }
 };
