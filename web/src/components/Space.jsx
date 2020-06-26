@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Basic from "./Spaces/Basic";
 import Body from "./Spaces/Body";
 import Headers from "./Spaces/Headers";
+import SpaceCard from "./Spaces/SpaceCard";
 import Tab from "./Common/Tab/Tab";
 import Tabs from "./Common/Tab/Tabs";
 import { v4 as uuid } from "uuid";
-import { CreateSpace } from "../services/Services";
+import { CreateSpace, GetSpace } from "../services/Services";
 
 function Space() {
   const [headers, setHeaders] = useState([
@@ -19,8 +20,12 @@ function Space() {
     url: "",
   });
 
+  useEffect(() => {
+    GetSpace();
+  }, []);
+
   const createSpace = () => {
-    CreateSpace({ ...basic, headers, body });
+    CreateSpace({ ...basic, id: uuid(), headers, body });
   };
 
   return (
@@ -49,6 +54,15 @@ function Space() {
               </div>
             </div>
           </div>
+        </div>
+        <div className="col-sm-2 col-md-2"></div>
+      </div>
+      <div className="row">
+        <div className="col-sm-2 col-md-2"></div>
+        <div className="col-sm-8 col-md-8">
+          {[1, 2, 3].map((space) => {
+            return <SpaceCard />;
+          })}
         </div>
         <div className="col-sm-2 col-md-2"></div>
       </div>

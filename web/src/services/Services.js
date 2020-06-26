@@ -13,3 +13,14 @@ export const CreateSpace = (data) => {
       console.log(error);
     });
 };
+
+export const GetSpace = (data) => {
+  axios
+    .get(`/spaces`, data)
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
