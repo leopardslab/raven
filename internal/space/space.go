@@ -81,3 +81,5 @@ func UpdateSpace(w http.ResponseWriter, r *http.Request) {
 	searchResult := elasticsearch.UpdateData(vars["id"], data, "space")
 	json.NewEncoder(w).Encode(searchResult.Id)
 }
+
+func StartSpace(w http.ResponseWriter, r *http.Request) {}

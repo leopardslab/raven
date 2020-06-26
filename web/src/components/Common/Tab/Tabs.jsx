@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-const TabButtons = ({ i, buttons, changeTab, activeTab }) => {
+const TabButtons = ({ buttons, changeTab, activeTab }) => {
   return (
     <div className="tab-buttons">
-      {buttons.map((button) => {
+      {buttons.map((button, i) => {
         return (
           <button
             key={i}

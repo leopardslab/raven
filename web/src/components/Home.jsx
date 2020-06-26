@@ -34,11 +34,11 @@ function Home() {
           <div className="row">
             <div className="col-1 col-sm-1 col-md-1"></div>
             <div className="col-10 col-sm-10 col-md-10">
-              <h1>
-              Monitors all of your monitors in one spot
-              </h1>
+              <h1>Monitors all of your monitors in one spot</h1>
               <p>
-              Get a clear overview of all websites and APIs you're monitoring in one simple view. See the uptime, mean response time over the past day, week, or month to get an idea of their health.
+                Get a clear overview of all websites and APIs you're monitoring
+                in one simple view. See the uptime, mean response time over the
+                past day, week, or month to get an idea of their health.
               </p>
             </div>
             <div className="col-1 col-sm-1 col-md-1"></div>
