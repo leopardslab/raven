@@ -32,7 +32,7 @@ function App() {
           <Route
             exact
             path="/home"
-            render={(props) => <PrivateRoute component={Home} {...props} />}
+            render={(props) => <PublicRoute component={Home} {...props} />}
           />
           <Route
             exact
