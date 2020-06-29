@@ -8,10 +8,20 @@ import (
 	"net/http"
 )
 
+type Header struct {
+	ID    string
+	Field string
+	Value string
+}
+
 // Space Project space
 type Space struct {
-	ID   int32  `json:"id"`
-	Name string `json:"name"`
+	ID      string  `json:"id"`
+	Name    string   `json:"name"`
+	Type    string   `json:"type"`
+	URL     string   `json:"url"`
+	Headers []Header `json:"headers"`
+	Body    string   `json:"body"`
 }
 
 func CreateSpace(w http.ResponseWriter, r *http.Request) {
@@ -71,3 +81,5 @@ func UpdateSpace(w http.ResponseWriter, r *http.Request) {
 	searchResult := elasticsearch.UpdateData(vars["id"], data, "space")
 	json.NewEncoder(w).Encode(searchResult.Id)
 }
+
+func StartSpace(w http.ResponseWriter, r *http.Request) {}
