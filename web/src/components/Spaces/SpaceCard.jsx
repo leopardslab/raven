@@ -91,6 +91,7 @@ function SpaceCard({ data }) {
         <div className="col-1"></div>
         <div className="col-10">
           <AceEditor
+            mode="json"
             theme="github"
             name={data.id}
             value={data.body}
