@@ -17,7 +17,7 @@ func Route() *mux.Router {
 	r.HandleFunc("/space/{id}", middleware.RequireAuth(space.GetSpace)).Methods("GET")
 	r.HandleFunc("/oauth/redirect", auth.GetAuthClient).Methods("GET")
 	r.HandleFunc("/space/{id}", middleware.RequireAuth(space.GetSpace)).Methods("GET")
-	r.HandleFunc("/space/start", middleware.RequireAuth(space.StartSpace)).Methods("POST")
+	r.HandleFunc("/space/run", middleware.RequireAuth(space.RunSpace)).Methods("POST")
 	return r
 }
 

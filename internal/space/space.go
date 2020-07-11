@@ -3,9 +3,14 @@ package space
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/cloudlibz/raven/internal/metrics"
 	"github.com/cloudlibz/raven/platform/elasticsearch"
 	"github.com/gorilla/mux"
+	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 )
 
 type Header struct {
@@ -82,4 +87,32 @@ func UpdateSpace(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(searchResult.Id)
 }
 
-func StartSpace(w http.ResponseWriter, r *http.Request) {}
+func RunSpace(w http.ResponseWriter, r *http.Request) {
+	tr = metrics.Tracer()
+	var request = "GET"
+	var url = "https://www.google.com"
+	client := &http.Client{Transport: tr}
+
+	switch request{
+	case "GET":
+		resp, err := client.Get(url)
+		if err != nil {
+			log.Fatalf("get error: %s: %s", err, url)
+		}
+		defer resp.Body.Close()
+		output := ioutil.Discard
+		io.Copy(output, resp.Body)
+		break
+	case "POST":
+		break
+	case "PUT":
+		break
+	case "DELETE":
+		break
+	case "OPTION":
+		break
+	default:
+		print("Default")
+	}
+
+}

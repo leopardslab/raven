@@ -1,18 +1,17 @@
 import React from "react";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-json";
-import "ace-builds/src-noconflict/mode-text";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-github";
+import Editor from "../Common/Editor";
 
-function SpaceCard({ data }) {
+function SpaceCard({ data, runSpace }) {
   return (
     <div className="raven-card raven-space">
       <div className="row">
         <div className="col-1 col-md-1"></div>
         <div className="col-1 col-md-1">
           <div className="raven-space-start">
-            <i className="ri-play-line ri-2x start-icon"></i>
+            <i
+              className="ri-play-line ri-2x start-icon"
+              onClick={() => runSpace(data.id)}
+            ></i>
           </div>
         </div>
         <div className="col-5 col-md-5">
@@ -90,25 +89,7 @@ function SpaceCard({ data }) {
       <div className="row">
         <div className="col-1"></div>
         <div className="col-10">
-          <AceEditor
-            mode="json"
-            theme="github"
-            name={data.id}
-            value={data.body}
-            width="auto"
-            height="250px"
-            fontSize={16}
-            className="raven-ace"
-            editorProps={{ $blockScrolling: true }}
-            setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: false,
-              enableSnippets: false,
-              showLineNumbers: true,
-              tabSize: 2,
-              useWorker: false,
-            }}
-          />
+          <Editor name={data.id} value={data.body}></Editor>
         </div>
         <div className="col-1"></div>
       </div>

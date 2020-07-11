@@ -24,3 +24,14 @@ export const GetSpace = (callback) => {
       callback(error, null);
     });
 };
+
+export const RunSpace = (data, callback) => {
+  axios
+    .post(`/space/run`, data)
+    .then(({ data }) => {
+      callback(null, data);
+    })
+    .catch((error) => {
+      callback(error, null);
+    });
+};

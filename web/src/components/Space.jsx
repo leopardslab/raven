@@ -7,7 +7,7 @@ import Tab from "./Common/Tab/Tab";
 import Tabs from "./Common/Tab/Tabs";
 import { v4 as uuid } from "uuid";
 import dayjs from "dayjs";
-import { CreateSpace, GetSpace } from "../services/Services";
+import { CreateSpace, GetSpace, RunSpace } from "../services/Services";
 import { useRecoilState } from "recoil";
 import { spaceState } from "../store/atoms";
 import { useToasts } from "react-toast-notifications";
@@ -63,6 +63,12 @@ function Space() {
 
   const deleteSpace = (id) => {};
 
+  const runSpace = (id) => {
+    RunSpace({ id: id }, (data) => {
+      console.log("space", data);
+    });
+  };
+
   return (
     <div className="container">
       <div className="row">
@@ -97,7 +103,9 @@ function Space() {
         <div className="col-sm-8 col-md-8">
           {space &&
             space.map((data) => {
-              return <SpaceCard key={data.id} data={data} />;
+              return (
+                <SpaceCard key={data.id} data={data} runSpace={runSpace} />
+              );
             })}
         </div>
         <div className="col-sm-2 col-md-2"></div>

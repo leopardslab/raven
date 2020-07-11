@@ -3,14 +3,16 @@ import React, { Fragment } from "react";
 function Home() {
   return (
     <Fragment>
-      <div className="context">
+      <div className="context home">
         <nav>
           <div className="row">
             <div className="col-1 col-md-1 col-lg-2"></div>
             <div className="col-10 col-md-10 col-lg-8">
               <h2>Raven</h2>
             </div>
-            <div className="col-1 col-md-1 col-lg-2"></div>
+            <div className="col-1 col-md-1 col-lg-2">
+              <button className="raven-login">Login</button>
+            </div>
           </div>
         </nav>
         <div className="container">

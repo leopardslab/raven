@@ -1,12 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
-import AceEditor from "react-ace";
+import Editor from "../Common/Editor";
 import Select from "react-select";
 import _ from "lodash";
-
-import "ace-builds/src-noconflict/mode-json";
-import "ace-builds/src-noconflict/mode-text";
-import "ace-builds/src-noconflict/mode-javascript";
-import "ace-builds/src-noconflict/theme-github";
 
 const editor_modes = [
   { value: "json", label: "JSON" },
@@ -43,25 +38,7 @@ function Body({ body, setBody }) {
       <div className="row">
         <div className="col-md-1"></div>
         <div className="col-md-10">
-          <AceEditor
-            theme="github"
-            name="raven-body"
-            onChange={setBody}
-            value={body}
-            width="auto"
-            height="250px"
-            fontSize={16}
-            className="raven-ace"
-            editorProps={{ $blockScrolling: true }}
-            setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: false,
-              enableSnippets: false,
-              showLineNumbers: true,
-              tabSize: 2,
-              useWorker: false,
-            }}
-          />
+          <Editor name={"asas"} value={body} onChange={setBody}></Editor>
         </div>
         <div className="col-md-1"></div>
       </div>
