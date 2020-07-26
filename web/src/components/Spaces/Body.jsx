@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState } from "react";
 import Editor from "../Common/Editor";
 import Select from "react-select";
 import _ from "lodash";

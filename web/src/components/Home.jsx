@@ -1,6 +1,8 @@
 import React, { Fragment } from "react";
+import { useHistory } from "react-router-dom";
 
 function Home() {
+  let history = useHistory();
   return (
     <Fragment>
       <div className="context home">
@@ -11,7 +13,12 @@ function Home() {
               <h2>Raven</h2>
             </div>
             <div className="col-1 col-md-1 col-lg-2">
-              <button className="raven-login">Login</button>
+              <button
+                className="raven-login"
+                onClick={() => history.push("/login")}
+              >
+                Login
+              </button>
             </div>
           </div>
         </nav>
