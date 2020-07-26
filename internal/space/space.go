@@ -24,6 +24,7 @@ type Space struct {
 	Name    string   `json:"name"`
 	Type    string   `json:"type"`
 	URL     string   `json:"url"`
+	Request string   `json:"request"`
 	Headers []Header `json:"headers"`
 	Body    string   `json:"body"`
 }
@@ -86,12 +87,22 @@ func UpdateSpace(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(searchResult.Id)
 }
 
+type payload struct {
+	Id string `json:"id"`
+}
+
 func RunSpace(w http.ResponseWriter, r *http.Request) {
 	var Spaces Space
-	params := mux.Vars(r)
+	var Payload payload
+	b, err := ioutil.ReadAll(r.Body)
+	err = json.Unmarshal(b, &Payload)
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
 	result := elasticsearch.Query{
 		Key:   "id",
-		Value: params["id"],
+		Value: Payload.Id,
 	}
 	searchResult := elasticsearch.QueryData(result, "space")
 	for _, hit := range searchResult.Hits.Hits {
@@ -100,12 +111,10 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("[Getting Students][Unmarshal] Err=", err)
 		}
 	}
-	var request = Spaces.Type
-	var url = Spaces.URL
+
 	tr := metrics.Tracer()
-	//var request = "POST"
-	//var url = "https://www.google.com"
-	//var url = "https://72874543-d10d-45e0-b36e-70dc307093e0.mock.pstmn.io/post"
+	var request = Spaces.Request
+	var url = Spaces.URL
 	var data io.Reader
 	var resp *http.Response
 	client := &http.Client{Transport: tr}
