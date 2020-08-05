@@ -14,7 +14,7 @@ function Login() {
 
   useEffect(() => {
     getAuth();
-  }, [location]);
+  });
 
   const getAuth = () => {
     let code = new URLSearchParams(location.search).get("code");
@@ -49,6 +49,11 @@ function Login() {
         break;
       case "Twitter":
         window.location.assign(`https://api.twitter.com/oauth/request_token`);
+        break;
+      default:
+        window.location.assign(
+          `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${REDIRECT_URL}`
+        );
         break;
     }
   };
@@ -120,8 +125,6 @@ function Login() {
             <div className="col-1 col-sm-2 col-md-2"></div>
           </div>
         </div>
-      
-      
       </div>
       <div class="area">
         <ul class="circles">

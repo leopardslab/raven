@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { isAuthenticated } from "./utils/Auth";
 import Space from "./components/Space";
-import Loading from "./components/Loading";
+//import Loading from "./components/Loading";
 import Error from "./components/Error";
 import Home from "./components/Home";
 import Login from "./components/Login";
