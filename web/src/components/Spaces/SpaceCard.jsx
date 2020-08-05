@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 import Editor from "../Common/Editor";
 
 const reuestColor = (request) => {
@@ -74,28 +75,30 @@ function SpaceCard({ data, runSpace }) {
       <div className="row">
         <div className="col-1  col-md-1"></div>
         <div className="col-6  col-md-6">
-          {data.headers.map((header) => {
-            return (
-              <div className="row" key={header.ID}>
-                <div className="col-6  col-md-6">
-                  <input
-                    className="raven-input"
-                    placeholder="Name"
-                    value={header.Field}
-                    onChange={() => {}}
-                  ></input>
-                </div>
-                <div className="col-6  col-md-6">
-                  <input
-                    className="raven-input"
-                    placeholder="Name"
-                    value={header.Value}
-                    onChange={() => {}}
-                  ></input>
-                </div>
-              </div>
-            );
-          })}
+          {_.get(data, "headers.length", 0) > 0
+            ? _.get(data, "headers", []).map((header) => {
+                return (
+                  <div className="row" key={header.ID}>
+                    <div className="col-6  col-md-6">
+                      <input
+                        className="raven-input"
+                        placeholder="Name"
+                        value={header.Field}
+                        onChange={() => {}}
+                      ></input>
+                    </div>
+                    <div className="col-6  col-md-6">
+                      <input
+                        className="raven-input"
+                        placeholder="Name"
+                        value={header.Value}
+                        onChange={() => {}}
+                      ></input>
+                    </div>
+                  </div>
+                );
+              })
+            : null}
         </div>
         <div className="col-4"></div>
       </div>

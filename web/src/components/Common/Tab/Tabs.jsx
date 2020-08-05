@@ -1,19 +1,22 @@
 import React, { useState } from "react";
+import _ from "lodash";
 
 const TabButtons = ({ buttons, changeTab, activeTab }) => {
   return (
     <div className="tab-buttons">
-      {buttons.map((button, i) => {
-        return (
-          <button
-            key={i}
-            className="tab-button"
-            onClick={() => changeTab(button)}
-          >
-            {button}
-          </button>
-        );
-      })}
+      {_.get(buttons, "length", 0) > 0
+        ? _.map(buttons, (button, i) => {
+            return (
+              <button
+                key={i}
+                className="tab-button"
+                onClick={() => changeTab(button)}
+              >
+                {button}
+              </button>
+            );
+          })
+        : null}
     </div>
   );
 };
