@@ -126,8 +126,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			log.Fatalf("get error: %s: %s", err, url)
 		}
 		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
-
+		jsonResponseMetricsWriter(tr, w, resp)
 		break
 	case "POST":
 		print(url)
@@ -140,7 +139,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(tr, w, resp)
 		break
 	case "PUT":
 		req, err := http.NewRequest(http.MethodPut, url, data)
@@ -152,7 +151,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(tr, w, resp)
 		break
 	case "DELETE":
 		req, err := http.NewRequest(http.MethodDelete, url, data)
@@ -164,7 +163,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(tr, w, resp)
 		break
 	case "OPTION":
 		req, err := http.NewRequest(http.MethodOptions, url, data)
@@ -176,7 +175,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(tr, w, resp)
 		break
 	case "HEAD":
 		req, err := http.NewRequest(http.MethodHead, url, data)
@@ -188,7 +187,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(tr, w, resp)
 		break
 	case "PATCH":
 		req, err := http.NewRequest(http.MethodPatch, url, data)
@@ -200,7 +199,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(tr, w, resp)
 		break
 	default:
 		resp, err := client.Get(url)
@@ -208,8 +207,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			log.Fatalf("get error: %s: %s", err, url)
 		}
 		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
-
+		jsonResponseMetricsWriter(tr, w, resp)
 	}
 
 }
@@ -224,4 +222,15 @@ func gatherMetrics(tr *metrics.Submetric, resp *http.Response) metrics.Metric {
 	}
 
 	return metrics
+}
+
+func jsonResponseMetricsWriter(tr *metrics.Submetric, write http.ResponseWriter, resp *http.Response) {
+	data, err := json.Marshal(gatherMetrics(tr, resp))
+	if err != nil {
+		http.Error(write, err.Error(), http.StatusInternalServerError)
+
+	}
+	write.WriteHeader(200)
+	write.Header().Set("Content-Type", "application/json")
+	write.Write(data)
 }
