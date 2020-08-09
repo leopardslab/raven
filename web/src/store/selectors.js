@@ -14,7 +14,9 @@ export const filterSpaces = selector({
     );
 
     const name_filtered = _.filter(spaces, (space) => {
-      return space.name.indexOf(filter.name) != -1;
+      let space_name = space && space.name;
+      let filter_name = filter && filter.name;
+      return space_name.indexOf(filter_name) != -1;
     });
 
     if (request_filtered.length > 0) {
