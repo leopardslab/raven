@@ -28,7 +28,7 @@ function Login() {
           });
         }
         if (user) {
-          history.push("/space");
+          history.push("/main");
         }
       });
     }

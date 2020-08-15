@@ -20,6 +20,17 @@ function Navigation({ children }) {
 
         <nav className="nav-menu d-none d-lg-block">
           <ul>
+            <li>
+              <Link to="/space">
+                <span>Space</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/checks">
+                <span>Checks</span>
+              </Link>
+            </li>
+
             {isAuthenticated() ? (
               <li className="drop-down">
                 <img
@@ -45,7 +56,9 @@ function Navigation({ children }) {
                   </li>
                 </ul>
               </li>
-            ) : null}
+            ) : (
+              <li></li>
+            )}
           </ul>
         </nav>
       </div>

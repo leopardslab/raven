@@ -7,7 +7,7 @@ import Select from "react-select";
 import Tab from "./Common/Tab/Tab";
 import Tabs from "./Common/Tab/Tabs";
 import { v4 as uuid } from "uuid";
-import dayjs from "dayjs";
+import moment from "moment";
 import _ from "lodash";
 import { CreateSpace, GetSpace, RunSpace } from "../services/Services";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -61,7 +61,7 @@ function Space() {
       headers,
       body,
       runs: [],
-      created_at: dayjs().format(),
+      created_at: moment().format(),
     };
     CreateSpace(newSpace, (err, data) => {
       if (err) {
@@ -91,6 +91,7 @@ function Space() {
       ]);
     });
   };
+  console.log("space", space);
 
   return (
     <div className="container">

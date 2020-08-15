@@ -1897,6 +1897,11 @@ section {
   margin: 14px 0px 14px 0px;
   padding: 14px 0px 14px 0px;
 }
+.raven-check {
+  margin: 14px 0px 14px 0px;
+  .last-checked {
+  }
+}
 
 .raven-card {
   box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
@@ -1986,6 +1991,7 @@ section {
   .raven-avatar {
     width: 40px;
     height: 40px;
+    margin-left: 25px;
     border-radius: 10px;
   }
   .raven-avatar-name {
