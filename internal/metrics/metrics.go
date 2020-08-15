@@ -9,8 +9,8 @@ import (
 // Metric A metric under space
 type Metric struct {
 	Duration       time.Duration
-	ReponseTime    time.Duration
-	ConnectionTime time.Duration
+	Reponse    time.Duration
+	Connection time.Duration
 }
 
 type Submetric struct {

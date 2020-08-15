@@ -25,36 +25,38 @@ function Headers({ headers, setHeaders }) {
 
   return (
     <Fragment>
-      {headers.map(({ id, field, value }) => (
-        <Fragment key={id}>
-          <div className="row">
-            <div className="col-1"></div>
-            <div className="col-4">
-              <input
-                className="raven-input"
-                placeholder="Field"
-                value={field}
-                onChange={(e) => onChange(id, "field", e.target.value)}
-              ></input>
-            </div>
-            <div className="col-5">
-              <input
-                className="raven-input"
-                placeholder="Value"
-                value={value}
-                onChange={(e) => onChange(id, "value", e.target.value)}
-              ></input>
-            </div>
-            <div className="col-1">
-              <i
-                className="ri-delete-bin-line"
-                onClick={() => deleteHeader(id)}
-              ></i>
-            </div>
-            <div className="col-1"></div>
-          </div>
-        </Fragment>
-      ))}
+      {_.get(headers, "length", 0) > 0
+        ? _.map(headers, ({ id, field, value }) => (
+            <Fragment key={id}>
+              <div className="row">
+                <div className="col-1"></div>
+                <div className="col-4">
+                  <input
+                    className="raven-input"
+                    placeholder="Field"
+                    value={field}
+                    onChange={(e) => onChange(id, "field", e.target.value)}
+                  ></input>
+                </div>
+                <div className="col-5">
+                  <input
+                    className="raven-input"
+                    placeholder="Value"
+                    value={value}
+                    onChange={(e) => onChange(id, "value", e.target.value)}
+                  ></input>
+                </div>
+                <div className="col-1">
+                  <i
+                    className="ri-delete-bin-line"
+                    onClick={() => deleteHeader(id)}
+                  ></i>
+                </div>
+                <div className="col-1"></div>
+              </div>
+            </Fragment>
+          ))
+        : null}
       <div className="row">
         <div className="col-1"></div>
         <div className="col-9">

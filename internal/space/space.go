@@ -5,17 +5,25 @@ import (
 	"fmt"
 	"github.com/cloudlibz/raven/internal/metrics"
 	"github.com/cloudlibz/raven/platform/elasticsearch"
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 )
 
 type Header struct {
 	ID    string
 	Field string
 	Value string
+}
+
+type Run struct {
+	ID   string
+	Data metrics.Metric
+	Date time.Time
 }
 
 // Space Project space
@@ -27,6 +35,7 @@ type Space struct {
 	Request string   `json:"request"`
 	Headers []Header `json:"headers"`
 	Body    string   `json:"body"`
+	Runs    Run    `json:"runs"`
 }
 
 func CreateSpace(w http.ResponseWriter, r *http.Request) {
@@ -94,6 +103,7 @@ type payload struct {
 func RunSpace(w http.ResponseWriter, r *http.Request) {
 	var Spaces Space
 	var Payload payload
+	var ElasticID string
 	b, err := ioutil.ReadAll(r.Body)
 	err = json.Unmarshal(b, &Payload)
 	if err != nil {
@@ -106,12 +116,13 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 	}
 	searchResult := elasticsearch.QueryData(result, "space")
 	for _, hit := range searchResult.Hits.Hits {
+		ElasticID = hit.Id
 		err := json.Unmarshal(hit.Source, &Spaces)
 		if err != nil {
 			fmt.Println("[Getting Students][Unmarshal] Err=", err)
 		}
 	}
-
+	
 	tr := metrics.Tracer()
 	var request = Spaces.Request
 	var url = Spaces.URL
@@ -125,9 +136,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatalf("get error: %s: %s", err, url)
 		}
-		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
-
+		jsonResponseMetricsWriter(ElasticID, tr, w, resp)
 		break
 	case "POST":
 		print(url)
@@ -139,8 +148,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(ElasticID, tr, w, resp)
 		break
 	case "PUT":
 		req, err := http.NewRequest(http.MethodPut, url, data)
@@ -151,8 +159,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(ElasticID, tr, w, resp)
 		break
 	case "DELETE":
 		req, err := http.NewRequest(http.MethodDelete, url, data)
@@ -163,8 +170,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(ElasticID, tr, w, resp)
 		break
 	case "OPTION":
 		req, err := http.NewRequest(http.MethodOptions, url, data)
@@ -175,8 +181,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(ElasticID, tr, w, resp)
 		break
 	case "HEAD":
 		req, err := http.NewRequest(http.MethodHead, url, data)
@@ -187,8 +192,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(ElasticID, tr, w, resp)
 		break
 	case "PATCH":
 		req, err := http.NewRequest(http.MethodPatch, url, data)
@@ -199,17 +203,14 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
+		jsonResponseMetricsWriter(ElasticID, tr, w, resp)
 		break
 	default:
 		resp, err := client.Get(url)
 		if err != nil {
 			log.Fatalf("get error: %s: %s", err, url)
 		}
-		defer resp.Body.Close()
-		w.Write([]byte(fmt.Sprintf("%v", gatherMetrics(tr, resp))))
-
+		jsonResponseMetricsWriter(ElasticID, tr, w, resp)
 	}
 
 }
@@ -219,9 +220,29 @@ func gatherMetrics(tr *metrics.Submetric, resp *http.Response) metrics.Metric {
 	io.Copy(output, resp.Body)
 	metrics := metrics.Metric{
 		Duration:       tr.Duration(),
-		ReponseTime:    tr.ReqDuration(),
-		ConnectionTime: tr.ConnDuration(),
+		Reponse:    tr.ReqDuration(),
+		Connection: tr.ConnDuration(),
 	}
 
 	return metrics
+}
+
+func jsonResponseMetricsWriter(id string, tr *metrics.Submetric, write http.ResponseWriter, resp *http.Response) {
+	defer resp.Body.Close()
+	metrics := gatherMetrics(tr, resp)
+	Runs := Run{
+		ID:   uuid.New().String(),
+		Data: metrics,
+		Date: time.Now(),
+	}
+	body := map[string]interface{}{"runs": Runs}
+	elasticsearch.UpdateData(id, body, "space")
+	data, err := json.Marshal(Runs)
+	if err != nil {
+		http.Error(write, err.Error(), http.StatusInternalServerError)
+
+	}
+	write.WriteHeader(200)
+	write.Header().Set("Content-Type", "application/json")
+	write.Write(data)
 }

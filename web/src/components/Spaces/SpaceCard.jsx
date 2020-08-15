@@ -1,5 +1,7 @@
-import React from "react";
+import React, { Fragment } from "react";
+import _ from "lodash";
 import Editor from "../Common/Editor";
+import SpaceTimeGraph from "./SpaceTimeGraph";
 
 const reuestColor = (request) => {
   switch (request) {
@@ -36,12 +38,21 @@ function SpaceCard({ data, runSpace }) {
         </div>
         <div className="col-5  col-md-5"></div>
       </div>
-      <hr />
-      <div className="row">
-        <div className="col-1  col-md-1"></div>
-        <div className="col-5  col-md-5">{/* <h4>{data.name}</h4> */}</div>
-        <div className="col-6  col-md-6"></div>
-      </div>
+      {!_.isUndefined(data.runs) ? (
+        <Fragment>
+          <hr />
+          <div className="row">
+            <div className="col-1  col-md-1"></div>
+            <div className="col-10  col-md-10">
+              <SpaceTimeGraph runs={data.runs} />
+            </div>
+            <div className="col-1  col-md-1"></div>
+          </div>
+          <hr />
+        </Fragment>
+      ) : (
+        <hr />
+      )}
       <div className="row">
         <div className="col-1  col-md-1"></div>
         <div className="col-2  col-md-2">
@@ -74,28 +85,30 @@ function SpaceCard({ data, runSpace }) {
       <div className="row">
         <div className="col-1  col-md-1"></div>
         <div className="col-6  col-md-6">
-          {data.headers.map((header) => {
-            return (
-              <div className="row" key={header.ID}>
-                <div className="col-6  col-md-6">
-                  <input
-                    className="raven-input"
-                    placeholder="Name"
-                    value={header.Field}
-                    onChange={() => {}}
-                  ></input>
-                </div>
-                <div className="col-6  col-md-6">
-                  <input
-                    className="raven-input"
-                    placeholder="Name"
-                    value={header.Value}
-                    onChange={() => {}}
-                  ></input>
-                </div>
-              </div>
-            );
-          })}
+          {_.get(data, "headers.length", 0) > 0
+            ? _.get(data, "headers", []).map((header) => {
+                return (
+                  <div className="row" key={header.ID}>
+                    <div className="col-6  col-md-6">
+                      <input
+                        className="raven-input"
+                        placeholder="Name"
+                        value={header.Field}
+                        onChange={() => {}}
+                      ></input>
+                    </div>
+                    <div className="col-6  col-md-6">
+                      <input
+                        className="raven-input"
+                        placeholder="Name"
+                        value={header.Value}
+                        onChange={() => {}}
+                      ></input>
+                    </div>
+                  </div>
+                );
+              })
+            : null}
         </div>
         <div className="col-4"></div>
       </div>
