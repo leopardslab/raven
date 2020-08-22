@@ -2,25 +2,9 @@ import React, { Fragment } from "react";
 import _ from "lodash";
 import Editor from "../Common/Editor";
 import SpaceTimeGraph from "./SpaceTimeGraph";
+import { reuestColor } from "../../utils/common";
 
-const reuestColor = (request) => {
-  switch (request) {
-    case "POST":
-      return "#2196f3";
-    case "PUT":
-      return "#4caf50";
-    case "GET":
-      return "#f44336";
-    case "DELETE":
-      return "#3f51b5";
-    case "OPTION":
-      return "#ffeb3b";
-    default:
-      return "#f44336";
-  }
-};
-
-function SpaceCard({ data, runSpace }) {
+function SpaceCard({ data, runSpace, createCheck }) {
   return (
     <div className="raven-card raven-space">
       <div className="row">
@@ -36,9 +20,29 @@ function SpaceCard({ data, runSpace }) {
         <div className="col-5 col-md-5">
           <h4>{data.name}</h4>
         </div>
-        <div className="col-5  col-md-5"></div>
+        <div className="col-5  col-md-5">
+          <div className="row">
+            <div className="col-6  col-md-6"></div>
+            <div className="col-6  col-md-6">
+              {_.get(data, "isCheck", false) ? (
+                <i className="ri-focus-3-fill ri-2x raven-space-checked"></i>
+              ) : (
+                <i
+                  className="ri-focus-3-line ri-2x raven-space-check"
+                  onClick={(e) =>
+                    createCheck({
+                      id: data.id,
+                      name: data.name,
+                      request: data.request,
+                    })
+                  }
+                ></i>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
-      {!_.isUndefined(data.runs) ? (
+      {!_.isUndefined(data.runs) && _.get(data, "runs.ID.length", 0) > 0 ? (
         <Fragment>
           <hr />
           <div className="row">

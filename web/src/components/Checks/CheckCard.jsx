@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import CalendarHeatmap from "reactjs-calendar-heatmap";
+import SpaceTimeGraph from "../Spaces/SpaceTimeGraph";
+import { reuestColor } from "../../utils/common";
 
 let chekc = [
   {
@@ -26,6 +28,7 @@ let chekc = [
 ];
 
 function CheckCard({ name, runs, period, type, regions, data }) {
+  const [isVisible, setIsVisible] = useState(false);
   return (
     <div className="raven-card raven-check">
       <div className="row">
@@ -39,6 +42,19 @@ function CheckCard({ name, runs, period, type, regions, data }) {
       <div className="row">
         <div className="col-1 col-md-1"></div>
         <div className="col-5 col-md-5">
+          <div className="raven-check-type">
+            <span
+              className="get"
+              style={{ backgroundColor: reuestColor(type) }}
+            >
+              {type}
+            </span>
+          </div>
+        </div>
+        <div className="col-1 col-md-1"></div>
+        <div className="col-5  col-md-5"></div>
+        <div className="col-1 col-md-1"></div>
+        <div className="col-5 col-md-5">
           <h6>{period}</h6>
         </div>
         <div className="col-1 col-md-1"></div>
@@ -47,10 +63,11 @@ function CheckCard({ name, runs, period, type, regions, data }) {
       <hr />
       <div className="row">
         <div className="col-1  col-md-1"></div>
-        <div className="col-5  col-md-5">
-          <CalendarHeatmap data={chekc}></CalendarHeatmap>
+        <div className="col-10  col-md-10">
+          {/* <CalendarHeatmap data={chekc} overview="day"></CalendarHeatmap> */}
+          <SpaceTimeGraph></SpaceTimeGraph>
         </div>
-        <div className="col-6  col-md-6"></div>
+        <div className="col-1  col-md-1"></div>
       </div>
     </div>
   );

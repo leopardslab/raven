@@ -5,6 +5,11 @@ export const spaceState = atom({
   default: [],
 });
 
+export const checkState = atom({
+  key: "raven-checks",
+  default: [],
+});
+
 export const filterState = atom({
   key: "raven-spaces-filter",
   default: {
