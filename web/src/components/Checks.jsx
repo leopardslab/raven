@@ -34,6 +34,7 @@ function Checks() {
           name={check.name}
           period={check.period}
           type={check.type}
+          runs={check.runs}
         />
       ))}
     </div>

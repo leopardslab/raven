@@ -32,6 +32,8 @@ const request_types = [
 ];
 
 const period_types = [
+  { value: "10 Seconds", label: "10 Seconds" },
+  { value: "30 Seconds", label: "30 Seconds" },
   { value: "Minutes", label: "Minutes" },
   { value: "Hourly", label: "Hourly" },
   { value: "Daily", label: "Daily" },
@@ -68,6 +70,7 @@ function Space() {
   const [headers, setHeaders] = useState([
     { id: uuid(), field: "", value: "" },
   ]);
+  const [newCheck, setNewCheck] = useState(null);
   const [body, setBody] = useState("");
   const [period, setPeriod] = useState("");
   const [basic, setBasic] = useState({
@@ -108,6 +111,13 @@ function Space() {
         });
       } else {
         setSpace([...space, newSpace]);
+        setBasic({
+          name: "",
+          request: "",
+          type: "",
+          url: "",
+          isCheck: false,
+        });
       }
     });
   };
@@ -125,33 +135,42 @@ function Space() {
     });
   };
 
-  const createCheck = ({ id, name, request }) => {
+  const createCheckModel = ({ id, name, request }) => {
+    setNewCheck({
+      id: uuid(),
+      name: name,
+      sid: id,
+      type: request,
+      createdAt: moment().format(),
+      running: true,
+      period: "",
+    });
     setIsOpen(true);
-    // let newCheck = {
-    //   id: uuid(),
-    //   name: name,
-    //   sid: id,
-    //   type: request,
-    //   createdAt: moment().format(),
-    // };
-    // CreateCheck(newCheck, (error, data) => {
-    //   if (error) {
-    //     addToast("Unable to create check! Please try again!", {
-    //       appearance: "error",
-    //       autoDismiss: true,
-    //     });
-    //   } else {
-    //     setCheck([...check, newCheck]);
-    //     let selected = space.find((space) => space.id === id);
-    //     let selectedIndex = space.findIndex((space) => space.id === id);
-    //     selected = { ...selected, isCheck: true };
-    //     setSpace([
-    //       ...space.slice(0, selectedIndex),
-    //       selected,
-    //       ...space.slice(selectedIndex + 1),
-    //     ]);
-    //   }
-    // });
+  };
+
+  const createCheck = () => {
+    CreateCheck({ ...newCheck, period: period }, (error, data) => {
+      if (error) {
+        addToast("Unable to create check! Please try again!", {
+          appearance: "error",
+          autoDismiss: true,
+        });
+      } else {
+        setCheck([...check, newCheck]);
+        let selected = space.find((space) => space.id === newCheck.id);
+        let selectedIndex = space.findIndex(
+          (space) => space.id === newCheck.id
+        );
+        selected = { ...selected, isCheck: true };
+        setSpace([
+          ...space.slice(0, selectedIndex),
+          selected,
+          ...space.slice(selectedIndex + 1),
+        ]);
+      }
+    });
+
+    closeModal();
   };
 
   const openModal = () => {
@@ -161,6 +180,8 @@ function Space() {
   const afterOpenModal = () => {};
 
   const closeModal = () => {
+    setNewCheck(null);
+    setPeriod("");
     setIsOpen(false);
   };
 
@@ -241,7 +262,7 @@ function Space() {
                       key={data.id}
                       data={data}
                       runSpace={runSpace}
-                      createCheck={createCheck}
+                      createCheck={createCheckModel}
                     />
                   );
                 })
@@ -280,7 +301,7 @@ function Space() {
                 options={period_types}
                 blurInputOnSelect
                 placeholder="Period Types"
-                value={period}
+                value={_.find(period_types, { value: period })}
                 onChange={(e) => setPeriod(e.value)}
               />
             </div>
@@ -300,8 +321,8 @@ function Space() {
               </button>
             </div>
             <div className="col-md-3 col-3">
-              <button onClick={closeModal} className="raven-buton">
-                Select
+              <button onClick={createCheck} className="raven-buton">
+                Create
               </button>
             </div>
           </div>

@@ -16,8 +16,11 @@ type Check struct {
 	Type      string       `json:"type"`
 	Data      []*space.Run `json:"data"`
 	Period    string       `json:"period"`
+	Running   bool         `json:"running"`
 	CreatedAt string       `json:"createdAt"`
 }
+
+
 
 func CreateCheck(w http.ResponseWriter, r *http.Request) {
 	var newCheck Check
@@ -31,7 +34,6 @@ func CreateCheck(w http.ResponseWriter, r *http.Request) {
 	dataJSON, err := json.Marshal(newCheck)
 	res := elasticsearch.IndexData(dataJSON, "check")
 	json.NewEncoder(w).Encode(&res)
-
 }
 
 func GetCheck(w http.ResponseWriter, r *http.Request) {

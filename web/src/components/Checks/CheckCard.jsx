@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, Fragment } from "react";
+import _ from "lodash";
 import CalendarHeatmap from "reactjs-calendar-heatmap";
 import SpaceTimeGraph from "../Spaces/SpaceTimeGraph";
 import { reuestColor } from "../../utils/common";
@@ -27,20 +28,27 @@ let chekc = [
   },
 ];
 
-function CheckCard({ name, runs, period, type, regions, data }) {
+function CheckCard({ name, runs, period, type, status, regions }) {
   const [isVisible, setIsVisible] = useState(false);
+  const [more, setMore] = useState(false);
   return (
     <div className="raven-card raven-check">
       <div className="row">
         <div className="col-1 col-md-1"></div>
+        <div className="col-1 col-md-1">
+          <div className="raven-check-start">
+            {status ? (
+              <i className="ri-play-line ri-2x start-icon"></i>
+            ) : (
+              <i className="ri-pause-line ri-2x start-icon"></i>
+            )}
+          </div>
+        </div>
         <div className="col-5 col-md-5">
           <h4>{name}</h4>
         </div>
-        <div className="col-1 col-md-1"></div>
         <div className="col-5  col-md-5"></div>
-      </div>
-      <div className="row">
-        <div className="col-1 col-md-1"></div>
+        <div className="col-2 col-md-2"></div>
         <div className="col-5 col-md-5">
           <div className="raven-check-type">
             <span
@@ -51,8 +59,8 @@ function CheckCard({ name, runs, period, type, regions, data }) {
             </span>
           </div>
         </div>
-        <div className="col-1 col-md-1"></div>
         <div className="col-5  col-md-5"></div>
+        <div className="col-1 col-md-1"></div>
         <div className="col-1 col-md-1"></div>
         <div className="col-5 col-md-5">
           <h6>{period}</h6>
@@ -60,7 +68,38 @@ function CheckCard({ name, runs, period, type, regions, data }) {
         <div className="col-1 col-md-1"></div>
         <div className="col-5  col-md-5"></div>
       </div>
-      <hr />
+      <div className="row">
+        {!_.isUndefined(runs) && _.get(runs, "length", 0) > 0 ? (
+          <Fragment>
+            <hr />
+            {more ? (
+              <div className="row">
+                <div className="col-1  col-md-1"></div>
+                <div className="col-10  col-md-10">
+                  <SpaceTimeGraph runs={runs[0]} />
+                </div>
+                <div className="col-1  col-md-1"></div>
+              </div>
+            ) : (
+              runs.map((run) => {
+                return (
+                  <div className="row">
+                    <div className="col-1  col-md-1"></div>
+                    <div className="col-10  col-md-10">
+                      <SpaceTimeGraph runs={run} />
+                    </div>
+                    <div className="col-1  col-md-1"></div>
+                  </div>
+                );
+              })
+            )}
+
+            <hr />
+          </Fragment>
+        ) : (
+          <hr />
+        )}
+      </div>
       <div className="row">
         <div className="col-1  col-md-1"></div>
         <div className="col-10  col-md-10">
