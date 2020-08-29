@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import { isAuthenticated } from "../utils/Auth";
 import { useHistory } from "react-router-dom";
 
 function Home() {

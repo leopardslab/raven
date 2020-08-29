@@ -12,9 +12,15 @@ function Navigation({ children }) {
       >
         <div className="logo mr-auto">
           <h1 className="text-light">
-            <Link to="/home">
-              <span>Raven</span>
-            </Link>
+            {isAuthenticated() ? (
+              <Link to="/main">
+                <span>Raven</span>
+              </Link>
+            ) : (
+              <Link to="/home">
+                <span>Raven</span>
+              </Link>
+            )}
           </h1>
         </div>
 
@@ -57,7 +63,11 @@ function Navigation({ children }) {
                 </ul>
               </li>
             ) : (
-              <li></li>
+              <li>
+                <Link to="/login">
+                  <span>Login</span>
+                </Link>
+              </li>
             )}
           </ul>
         </nav>
