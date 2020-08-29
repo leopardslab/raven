@@ -1813,6 +1813,18 @@ section {
 
 .home {
   .raven-login {
+    border-radius: 15px;
+    border-width: 0px;
+    border-color: #b3b3b3;
+    margin: 2px;
+    padding: 5px;
+  }
+  .raven-login:hover {
+    border-radius: 15px;
+    border-width: 0px;
+    background-color: #b3b3b3;
+    margin: 2px;
+    padding: 5px;
   }
 }
 

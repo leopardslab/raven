@@ -29,7 +29,6 @@ let chekc = [
 ];
 
 function CheckCard({ name, runs, period, type, status, regions }) {
-  const [isVisible, setIsVisible] = useState(false);
   const [more, setMore] = useState(false);
   return (
     <div className="raven-card raven-check">
@@ -77,6 +76,11 @@ function CheckCard({ name, runs, period, type, status, regions }) {
                 <div className="col-1  col-md-1"></div>
                 <div className="col-10  col-md-10">
                   <SpaceTimeGraph runs={runs[0]} />
+                </div>
+                <div className="col-1  col-md-1"></div>
+                <div className="col-1  col-md-1"></div>
+                <div className="col-10  col-md-10">
+                  <span onClick={() => setMore(true)}>More..</span>
                 </div>
                 <div className="col-1  col-md-1"></div>
               </div>
