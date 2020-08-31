@@ -28,14 +28,16 @@ type Run struct {
 
 // Space Project space
 type Space struct {
-	ID      string   `json:"id"`
-	Name    string   `json:"name"`
-	Type    string   `json:"type"`
-	URL     string   `json:"url"`
-	Request string   `json:"request"`
-	Headers []Header `json:"headers"`
-	Body    string   `json:"body"`
-	Runs    Run    `json:"runs"`
+	ID        string   `json:"id"`
+	Name      string   `json:"name"`
+	Type      string   `json:"type"`
+	URL       string   `json:"url"`
+	Request   string   `json:"request"`
+	Headers   []Header `json:"headers"`
+	Body      string   `json:"body"`
+	Runs      Run      `json:"runs"`
+	IsCheck   bool     `json:"isCheck"`
+	CreatedAt string   `json:"createdAt"`
 }
 
 func CreateSpace(w http.ResponseWriter, r *http.Request) {
@@ -93,16 +95,17 @@ func UpdateSpace(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	data := map[string]interface{}{"name": Space.Name}
 	searchResult := elasticsearch.UpdateData(vars["id"], data, "space")
+	print(searchResult)
 	json.NewEncoder(w).Encode(searchResult.Id)
 }
 
-type payload struct {
+type Payload struct {
 	Id string `json:"id"`
 }
 
 func RunSpace(w http.ResponseWriter, r *http.Request) {
 	var Spaces Space
-	var Payload payload
+	var Payload Payload
 	var ElasticID string
 	b, err := ioutil.ReadAll(r.Body)
 	err = json.Unmarshal(b, &Payload)
@@ -122,7 +125,7 @@ func RunSpace(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("[Getting Students][Unmarshal] Err=", err)
 		}
 	}
-	
+
 	tr := metrics.Tracer()
 	var request = Spaces.Request
 	var url = Spaces.URL
@@ -219,7 +222,7 @@ func gatherMetrics(tr *metrics.Submetric, resp *http.Response) metrics.Metric {
 	output := ioutil.Discard
 	io.Copy(output, resp.Body)
 	metrics := metrics.Metric{
-		Duration:       tr.Duration(),
+		Duration:   tr.Duration(),
 		Reponse:    tr.ReqDuration(),
 		Connection: tr.ConnDuration(),
 	}
@@ -245,4 +248,52 @@ func jsonResponseMetricsWriter(id string, tr *metrics.Submetric, write http.Resp
 	write.WriteHeader(200)
 	write.Header().Set("Content-Type", "application/json")
 	write.Write(data)
+}
+
+func GetSelectedSpace(id string) Space {
+	var Spaces Space
+	data := elasticsearch.Query{
+		Key:   "id",
+		Value: id,
+	}
+	searchResult := elasticsearch.QueryData(data, "space")
+	for _, hit := range searchResult.Hits.Hits {
+		err := json.Unmarshal(hit.Source, &Spaces)
+		if err != nil {
+			fmt.Println("[Getting Students][Unmarshal] Err=", err)
+		}
+	}
+	return Spaces
+}
+
+func MakeSpaceCheck(elasticId string) {
+	body := map[string]interface{}{"IsCheck": true}
+	elasticsearch.UpdateData(elasticId, body, "space")
+	//data, err := json.Marshal(body)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//return data
+}
+
+func GetSpaceElasticsearcId(spaceId string) string {
+	var Spaces Space
+	var ElasticID string
+	payload := Payload{
+		Id: spaceId,
+	}
+	result := elasticsearch.Query{
+		Key:   "id",
+		Value: payload.Id,
+	}
+	searchResult := elasticsearch.QueryData(result, "space")
+	for _, hit := range searchResult.Hits.Hits {
+		ElasticID = hit.Id
+		err := json.Unmarshal(hit.Source, &Spaces)
+		if err != nil {
+			fmt.Println("Unmarshal] Err=", err)
+		}
+	}
+
+	return ElasticID
 }

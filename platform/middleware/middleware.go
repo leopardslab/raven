@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"github.com/cloudlibz/raven/platform/auth"
 	"net/http"
 )
@@ -14,7 +13,6 @@ func RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(res http.ResponseWriter, req *http.Request) {
 		token := req.Header.Get("Authorization")
 		if !auth.VerifyToken(token) {
-			fmt.Fprint(res, "Unauthorized!,Invalid token")
 			res.WriteHeader(http.StatusUnauthorized)
 			return
 		}

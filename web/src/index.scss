@@ -1813,6 +1813,18 @@ section {
 
 .home {
   .raven-login {
+    border-radius: 15px;
+    border-width: 0px;
+    border-color: #b3b3b3;
+    margin: 2px;
+    padding: 5px;
+  }
+  .raven-login:hover {
+    border-radius: 15px;
+    border-width: 0px;
+    background-color: #b3b3b3;
+    margin: 2px;
+    padding: 5px;
   }
 }
 
@@ -1876,6 +1888,23 @@ section {
     }
   }
 
+  .raven-space-check {
+    float: right;
+    cursor: pointer;
+    margin-right: 15px;
+    color: #888;
+  }
+
+  .raven-space-checked {
+    float: right;
+    cursor: pointer;
+    margin-right: 15px;
+  }
+
+  .raven-space-check:hover {
+    color: #000000;
+  }
+
   .raven-space-start:hover {
     background-color: #2684ff;
     border-color: #ffffff;
@@ -1891,11 +1920,87 @@ section {
   }
 }
 
+.raven-margin {
+  height: 18px;
+}
+
+.raven-model-options {
+  bottom: 0%;
+}
+
 .raven-filter {
   box-shadow: 0px 0px 30px rgba(127, 137, 161, 0.25);
   border-radius: 5px;
   margin: 14px 0px 14px 0px;
   padding: 14px 0px 14px 0px;
+}
+.raven-check {
+  margin: 14px 0px 14px 0px;
+  .last-checked {
+  }
+  .raven-check-type {
+    margin: 7px 0px 7px 0px;
+    .get {
+      padding: 8px;
+      border-radius: 10px;
+      font-weight: 500;
+      color: #ffffff;
+      width: 100%;
+      background-color: #ef5350;
+    }
+    .post {
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 500;
+      color: #ffffff;
+      width: 100%;
+      background-color: #ab47bc;
+    }
+    .put {
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 500;
+      color: #ffffff;
+      width: 100%;
+      background-color: #ec407a;
+    }
+    .delete {
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 500;
+      color: #ffffff;
+      width: 100%;
+      background-color: #42a5f5;
+    }
+    .option {
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: 500;
+      color: #ffffff;
+      width: 100%;
+      background-color: #66bb6a;
+    }
+  }
+
+  .raven-check-start {
+    border-radius: 50%;
+    border-style: solid;
+    border-width: 1px;
+    width: 50px;
+    border-color: #b3b3b3;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    .start-icon {
+      top: 50%;
+    }
+  }
+  .raven-check-start:hover {
+    background-color: #2684ff;
+    border-color: #ffffff;
+    color: #fff;
+  }
 }
 
 .raven-card {
@@ -1986,6 +2091,7 @@ section {
   .raven-avatar {
     width: 40px;
     height: 40px;
+    margin-left: 25px;
     border-radius: 10px;
   }
   .raven-avatar-name {

@@ -1,7 +1,9 @@
 import React, { Suspense } from "react";
 import { isAuthenticated } from "./utils/Auth";
 import Space from "./components/Space";
+import Checks from "./components/Checks";
 //import Loading from "./components/Loading";
+import Main from "./components/Main";
 import Error from "./components/Error";
 import Home from "./components/Home";
 import Login from "./components/Login";
@@ -40,6 +42,16 @@ function App() {
               exact
               path="/login"
               render={(props) => <PublicRoute component={Login} {...props} />}
+            />
+            <Route
+              exact
+              path="/checks"
+              render={(props) => <PrivateRoute component={Checks} {...props} />}
+            />
+            <Route
+              exact
+              path="/main"
+              render={(props) => <PrivateRoute component={Main} {...props} />}
             />
             <Route exact path="*" render={(props) => <Error {...props} />} />
           </Switch>

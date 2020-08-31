@@ -12,14 +12,31 @@ function Navigation({ children }) {
       >
         <div className="logo mr-auto">
           <h1 className="text-light">
-            <Link to="/home">
-              <span>Raven</span>
-            </Link>
+            {isAuthenticated() ? (
+              <Link to="/main">
+                <span>Raven</span>
+              </Link>
+            ) : (
+              <Link to="/home">
+                <span>Raven</span>
+              </Link>
+            )}
           </h1>
         </div>
 
         <nav className="nav-menu d-none d-lg-block">
           <ul>
+            <li>
+              <Link to="/space">
+                <span>Space</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/checks">
+                <span>Checks</span>
+              </Link>
+            </li>
+
             {isAuthenticated() ? (
               <li className="drop-down">
                 <img
@@ -45,7 +62,13 @@ function Navigation({ children }) {
                   </li>
                 </ul>
               </li>
-            ) : null}
+            ) : (
+              <li>
+                <Link to="/login">
+                  <span>Login</span>
+                </Link>
+              </li>
+            )}
           </ul>
         </nav>
       </div>
